@@ -39,7 +39,7 @@ class asian_face_dataset():
         sample = {'image' :  image,"label" :label}
         return sample
 
-"
+
 trns = transforms.Compose([ transforms.Resize((224,224)),
                             transforms.RandomHorizontalFlip(p=0.5),
                             transforms.RandomRotation(30),
@@ -55,3 +55,5 @@ test_set = asian_face_dataset(transform=trns_test,train=False)
 
 def get_train_loader(batch_size=16):
     return DataLoader(train_set,batch_size=batch_size,shuffle=True,num_workers=os.cpu_count()) , DataLoader(test_set,batch_size=batch_size,shuffle=False,num_workers=os.cpu_count())
+def get_dataset():
+    return train_set ,train_set

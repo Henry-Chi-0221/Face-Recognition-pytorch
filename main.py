@@ -16,6 +16,7 @@ num_epoch = 1
 lr = 0.0005
 bs = 4
 train_loader , test_loader = dataset.get_train_loader(batch_size = bs)
+train_set , test_set = dataset.get_dataset()
 num_classes = 2
 
 
@@ -53,6 +54,7 @@ def test():
     net.load_state_dict(torch.load("./checkpoint.pth"))
     correct = 0
     total = 0
+    length = len(test_set)
     with torch.no_grad():
         for i ,sample in enumerate(test_loader):
             image , label = sample["image"].cuda() , sample["label"].cuda()
@@ -60,10 +62,9 @@ def test():
             _,predicted = torch.max(output.data, 1)
             total+= label.size(0)
             correct += (predicted==label).sum().item()
-            #print(label)
             if i%100 == 0:
-                print(f"{i}/{32816/bs}")
-    print('Accuracy of the network on the 10000 test images: %d %%' % (
+                print(f"{i}/{length/bs}")
+    print('Accuracy of the network on all test images: %d %%' % (
     100 * correct / total))
 
 for epoch in range(num_epoch):

@@ -25,5 +25,6 @@ ext/run-tests.php
 ext/.deps
 ext/libtool
 tarball-lite
-.vscode/*
 
+.vscode/
+__pytorch__/
