@@ -23,7 +23,7 @@ model = model.cuda()
 
 conversion = conversion()
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_frontalface_default.xml')
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(2)
 while(True):
     ret ,frame = cap.read()
     if ret == True:
@@ -38,7 +38,8 @@ while(True):
             crop = img_ori[y:y+h, x:x+w]
             crop = conversion.cv2_to_tensor(cv2.resize(crop,(224,224))).cuda()
             output = model(crop)
-            print(print(f"output : {output}"))
+            _,predicted = torch.max(output,1)
+            print(print(f"output : {predicted}"))
         cv2.imshow('src' , frame)
         cv2.imshow('gray' , gray)
         if cv2.waitKey(1) % 0xFF == ord('q'):

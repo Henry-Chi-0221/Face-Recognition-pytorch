@@ -7,18 +7,31 @@ import glob
 from PIL import Image
 import pandas as pd 
 import os
-
+import math
 class asian_face_dataset():
     def __init__(self,path_dataset="./tarball-lite/AFAD-Lite/*/*/*.jpg",
-                path_sample = "./capture/*",transform=None):
+                path_sample = "./capture/*",transform=None,train=True):
         self.transform = transform
+
         self.asian_face = sorted(glob.glob(path_dataset))
         gt = sorted(glob.glob(path_sample))
+
+        train_dataset_len = math.ceil(0.7*len(self.asian_face))
+        train_sample_len = math.ceil(0.7*len(gt))
+        #test_dataset_len = len(self.asian_face) - train_dataset_len
+        #test_sample_len =  len(gt) - train_sample_len
+        #print(len(self.asian_face))
+        if train==True:
+            self.asian_face = self.asian_face[0:train_dataset_len]
+            gt = gt[0:train_sample_len]
+        else:
+            self.asian_face = self.asian_face[train_dataset_len:]
+            gt = gt[train_sample_len:]
         self.duplicate = list()
         for i in range(500):
             self.duplicate+=gt
         self.full_image = self.asian_face + self.duplicate
-        self.full_label =np.concatenate((np.zeros(len(self.asian_face)),np.ones(50000)))
+        self.full_label =np.concatenate((np.zeros(len(self.asian_face)),np.ones(len(self.full_image)-len(self.asian_face))))
     def __len__(self):
        return len(self.full_label)
     def __getitem__(self , index):
@@ -46,8 +59,8 @@ print(len(full_label))
 """
 trns = transforms.Compose([ transforms.Resize((224,224)),
                             transforms.ToTensor()])
-data = asian_face_dataset(transform=trns)
-
+train_set = asian_face_dataset(transform=trns,train=True)
+test_set = asian_face_dataset(transform=trns,train=False)
 #print(transforms.ToPILImage()(data[0]['image']).show())
 
 #train_loader = DataLoader(data,batch_size=bs,shuffle=True,num_workers=os.cpu_count())
@@ -57,4 +70,4 @@ for i ,sample in enumerate(train_loader):
     label = sample['label']
 """
 def get_train_loader(batch_size=16):
-    return DataLoader(data,batch_size=batch_size,shuffle=True,num_workers=os.cpu_count())
+    return DataLoader(train_set,batch_size=batch_size,shuffle=True,num_workers=os.cpu_count()) , DataLoader(test_set,batch_size=batch_size,shuffle=False,num_workers=os.cpu_count())
