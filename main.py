@@ -12,7 +12,7 @@ import os
 import dataset
 import torchvision.models as models
 import torch.optim as optim
-num_epoch = 10
+num_epoch = 1
 lr = 0.001
 train_loader = dataset.get_train_loader(batch_size = 16)
 num_classes = 2
@@ -39,10 +39,10 @@ for epoch in range(num_epoch):
         optimizer.step()
         running_loss += loss.item()
         if i % 10== 9:    # print every 2000 mini-batches
-            print('[%d, %5d] loss: %.3f' %
+            print('[%d, %5d] loss: %.6f' %
                   (epoch + 1, i + 1, running_loss / 10))
             running_loss = 0.0
-        
+            torch.save(resnet.state_dict(),"./checkpoint.pth")
 
 
 
