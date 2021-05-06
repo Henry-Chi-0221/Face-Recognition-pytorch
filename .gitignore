@@ -28,3 +28,4 @@ tarball-lite
 
 .vscode/
 __pytorch__/
+capture/*
