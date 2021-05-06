@@ -15,12 +15,9 @@ class asian_face_dataset():
 
         self.asian_face = sorted(glob.glob(path_dataset))
         gt = sorted(glob.glob(path_sample))
-
+        
         train_dataset_len = math.ceil(0.7*len(self.asian_face))
         train_sample_len = math.ceil(0.7*len(gt))
-        #test_dataset_len = len(self.asian_face) - train_dataset_len
-        #test_sample_len =  len(gt) - train_sample_len
-        #print(len(self.asian_face))
         if train==True:
             self.asian_face = self.asian_face[0:train_dataset_len]
             gt = gt[0:train_sample_len]
@@ -42,32 +39,19 @@ class asian_face_dataset():
         sample = {'image' :  image,"label" :label}
         return sample
 
-"""
-path = "./tarball-lite/AFAD-Lite/*/*/*.jpg"
-asian_face = sorted(glob.glob(path))
-gt = sorted(glob.glob('./capture/*'))
-
-duplicate = list()
-for i in range(500):
-    duplicate+=gt
-
-full_image = asian_face + duplicate
-
-full_label =np.concatenate((np.zeros(len(asian_face)),np.ones(50000)))   
-print(len(full_image))
-print(len(full_label))
-"""
+"
 trns = transforms.Compose([ transforms.Resize((224,224)),
-                            transforms.ToTensor()])
+                            transforms.RandomHorizontalFlip(p=0.5),
+                            transforms.RandomRotation(30),
+                            transforms.RandomVerticalFlip(p=0.5),
+                            #transforms.ColorJitter(),
+                            transforms.ToTensor(),
+                            
+                            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+trns_test = transforms.Compose([ transforms.Resize((224,224)),
+                                transforms.ToTensor()])
 train_set = asian_face_dataset(transform=trns,train=True)
-test_set = asian_face_dataset(transform=trns,train=False)
-#print(transforms.ToPILImage()(data[0]['image']).show())
+test_set = asian_face_dataset(transform=trns_test,train=False)
 
-#train_loader = DataLoader(data,batch_size=bs,shuffle=True,num_workers=os.cpu_count())
-"""
-for i ,sample in enumerate(train_loader):
-    image = sample['image']
-    label = sample['label']
-"""
 def get_train_loader(batch_size=16):
     return DataLoader(train_set,batch_size=batch_size,shuffle=True,num_workers=os.cpu_count()) , DataLoader(test_set,batch_size=batch_size,shuffle=False,num_workers=os.cpu_count())

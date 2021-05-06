@@ -15,15 +15,16 @@ import torch.optim as optim
 from util import conversion
 
 
-model = models.resnet50(pretrained=True)
-model.fc = nn.Linear(2048,2)
+model = models.resnet18(pretrained=True)
+model.fc = nn.Linear(512,2)
 model.load_state_dict(torch.load("./checkpoint.pth"))
 
 model = model.cuda()
 
 conversion = conversion()
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_frontalface_default.xml')
-cap = cv2.VideoCapture(2)
+cap = cv2.VideoCapture(0)
+counter = 0
 while(True):
     ret ,frame = cap.read()
     if ret == True:
@@ -39,7 +40,14 @@ while(True):
             crop = conversion.cv2_to_tensor(cv2.resize(crop,(224,224))).cuda()
             output = model(crop)
             _,predicted = torch.max(output,1)
-            print(print(f"output : {predicted}"))
+            if(predicted==1):
+                counter+=1
+            else:
+                counter=0
+            if(counter>=30):
+                frame = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
+                counter=30
+            print(f"output : {predicted.item()} , counter : {counter}")
         cv2.imshow('src' , frame)
         cv2.imshow('gray' , gray)
         if cv2.waitKey(1) % 0xFF == ord('q'):

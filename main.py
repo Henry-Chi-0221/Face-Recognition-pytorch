@@ -13,18 +13,18 @@ import dataset
 import torchvision.models as models
 import torch.optim as optim
 num_epoch = 1
-lr = 0.001
-train_loader , test_loader = dataset.get_train_loader(batch_size = 16)
+lr = 0.0005
+bs = 4
+train_loader , test_loader = dataset.get_train_loader(batch_size = bs)
 num_classes = 2
 
 
 
-resnet = models.resnet50(pretrained=True)
+resnet = models.resnet18(pretrained=True)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(resnet.parameters() , lr = lr)
-resnet.fc = nn.Linear(2048,num_classes)
+resnet.fc = nn.Linear(512,num_classes)
 resnet = resnet.cuda()
-
 def train(epoch):
     epoch =epoch
     running_loss = 0.0
@@ -47,7 +47,9 @@ def train(epoch):
 
 
 def test():
-    net = models.resnet50(pretrained=True)
+    net = models.resnet18(pretrained=True)
+    net.fc = nn.Linear(512,num_classes)
+    net = net.cuda()
     net.load_state_dict(torch.load("./checkpoint.pth"))
     correct = 0
     total = 0
@@ -58,11 +60,14 @@ def test():
             _,predicted = torch.max(output.data, 1)
             total+= label.size(0)
             correct += (predicted==label).sum().item()
+            #print(label)
+            if i%100 == 0:
+                print(f"{i}/{32816/bs}")
     print('Accuracy of the network on the 10000 test images: %d %%' % (
     100 * correct / total))
 
 for epoch in range(num_epoch):
     resnet.train()
     train(epoch)
-    resnet.evel()
+    resnet.eval()
     test()

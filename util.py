@@ -105,8 +105,6 @@ def compute_means_std(n_channels=3):
     print("time elapsed: ", time()-before)
 
 
-#compute_means_std(3)
-#compute_means_std(1)
 
 def test_dataloader():
     conversion = conversion()
@@ -114,11 +112,11 @@ def test_dataloader():
     val_set   = dataset.depth_dataset_train(train=False,transform=dataset.val_transform)
     train_loader = DataLoader(
         dataset=train_set,
-        num_workers=os.cpu_count(),
+        num_workers=20,
     )
     val_loader = DataLoader(
         dataset=val_set,
-        num_workers=os.cpu_count()
+        num_workers=20
     )
     for i,sample in enumerate(train_loader):
         raw_l , _,_,_ = sample
