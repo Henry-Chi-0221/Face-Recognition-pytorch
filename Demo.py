@@ -45,9 +45,9 @@ while(True):
                     counter+=1
                 else:
                     counter=0
-                if(counter>=30):
+                if(counter>=5):
                     frame = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),1)
-                    counter=30
+                    counter=5
                 print(f"output : {predicted.item()} , counter : {counter}")
         cv2.imshow('src' , frame)
         #cv2.imshow('gray' , gray)
