@@ -12,7 +12,8 @@ import os
 import dataset
 import torchvision.models as models
 import torch.optim as optim
-num_epoch = 2
+import math
+num_epoch = 3
 lr = 0.0005
 bs = 4
 train_loader , test_loader = dataset.get_train_loader(batch_size = bs)
@@ -63,8 +64,8 @@ def test():
             total+= label.size(0)
             correct += (predicted==label).sum().item()
             if i%100 == 0:
-                print(f"{i}/{length/bs}")
-    print('Accuracy of the network on all test images: %d %%' % (
+                print(f"{i}/{math.ceil(length/bs)}")
+    print('Accuracy of the network on all test images: %f %%' % (
     100 * correct / total))
 
 for epoch in range(num_epoch):
