@@ -32,24 +32,25 @@ while(True):
 
         faces = face_cascade.detectMultiScale(gray, 1.2, 3)
         for (x,y,w,h) in faces:
-            img_ori = frame.copy()
-            frame = cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),2)
-            roi_gray = gray[y:y+h, x:x+w]
-            roi_color = frame[y:y+h, x:x+w]
-            crop = img_ori[y:y+h, x:x+w]
-            crop = conversion.cv2_to_tensor(cv2.resize(crop,(224,224))).cuda()
-            output = model(crop)
-            _,predicted = torch.max(output,1)
-            if(predicted==1):
-                counter+=1
-            else:
-                counter=0
-            if(counter>=30):
-                frame = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
-                counter=30
-            print(f"output : {predicted.item()} , counter : {counter}")
+            if w>100 and h>100:
+                img_ori = frame.copy()
+                frame = cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),1)
+                roi_gray = gray[y:y+h, x:x+w]
+                roi_color = frame[y:y+h, x:x+w]
+                crop = img_ori[y:y+h, x:x+w]
+                crop = conversion.cv2_to_tensor(cv2.resize(crop,(224,224))).cuda()
+                output = model(crop)
+                _,predicted = torch.max(output,1)
+                if(predicted==1):
+                    counter+=1
+                else:
+                    counter=0
+                if(counter>=30):
+                    frame = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),1)
+                    counter=30
+                print(f"output : {predicted.item()} , counter : {counter}")
         cv2.imshow('src' , frame)
-        cv2.imshow('gray' , gray)
+        #cv2.imshow('gray' , gray)
         if cv2.waitKey(1) % 0xFF == ord('q'):
             break
 cap.release()
