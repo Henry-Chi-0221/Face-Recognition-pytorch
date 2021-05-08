@@ -39,7 +39,7 @@ class asian_face_dataset():
         sample = {'image' :  image,"label" :label}
         return sample
 
-"
+
 trns = transforms.Compose([ transforms.Resize((224,224)),
                             transforms.RandomHorizontalFlip(p=0.5),
                             transforms.RandomRotation(30),

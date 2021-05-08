@@ -12,7 +12,7 @@ import os
 import dataset
 import torchvision.models as models
 import torch.optim as optim
-num_epoch = 1
+num_epoch = 2
 lr = 0.0005
 bs = 4
 train_loader , test_loader = dataset.get_train_loader(batch_size = bs)
