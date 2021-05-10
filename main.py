@@ -41,9 +41,9 @@ def train(epoch):
         loss.backward()
         optimizer.step()
         running_loss += loss.item()
-        if i % 10== 9:    # print every 2000 mini-batches
+        if i % 100== 99:    # print every 2000 mini-batches
             print('[%d, %5d] loss: %.6f' %
-                (epoch + 1, i + 1, running_loss / 10))
+                (epoch + 1, i + 1, running_loss / 100))
             running_loss = 0.0
             torch.save(resnet.state_dict(),"./checkpoint.pth")
 
