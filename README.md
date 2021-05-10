@@ -1,4 +1,9 @@
 # Face Recognition based on pytorch
+* Dataset : AFAD-LITE
+* Link : https://afad-dataset.github.io/
+* Github : https://github.com/afad-dataset/tarball-lite
+
+* To solve data imbalance ,sample data are duplicate by 500 times and applied data augmentation
 # Demo
 
 
