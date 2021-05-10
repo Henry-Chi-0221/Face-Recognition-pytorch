@@ -5,7 +5,8 @@
 
 * To solve data imbalance ,sample data are duplicate by 500 times and applied data augmentation
 # Demo
-
+* Blue box for front-face detection
+* Green box for target face detection
 
 # Usage
 * Prepare for training
