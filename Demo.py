@@ -14,12 +14,13 @@ import torchvision.models as models
 import torch.optim as optim
 from util import conversion
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 model = models.resnet18(pretrained=True)
 model.fc = nn.Linear(512,2)
 model.load_state_dict(torch.load("./checkpoint.pth"))
 
-model = model.cuda()
+model = model.to(device)
 
 conversion = conversion()
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_frontalface_default.xml')
@@ -39,7 +40,7 @@ while(True):
                 roi_gray = gray[y:y+h, x:x+w]
                 roi_color = frame[y:y+h, x:x+w]
                 crop = img_ori[y:y+h, x:x+w]
-                crop = conversion.cv2_to_tensor(cv2.resize(crop,(224,224))).cuda()
+                crop = conversion.cv2_to_tensor(cv2.resize(crop,(224,224))).to(device)
                 output = model(crop)
                 _,predicted = torch.max(output,1)
                 if(predicted==1):
@@ -49,7 +50,7 @@ while(True):
                 if(counter>=5):
                     frame = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),1)
                     counter=5
-                print(f"output : {predicted.item()} , counter : {counter}")
+                #print(f"output : {predicted.item()} , counter : {counter}")
         cv2.imshow('src' , frame)
         if cv2.waitKey(1) % 0xFF == ord('c'):
             cv2.imwrite('output.png' , frame)

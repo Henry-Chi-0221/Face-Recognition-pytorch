@@ -20,19 +20,19 @@ train_loader , test_loader = dataset.get_train_loader(batch_size = bs)
 train_set , test_set = dataset.get_dataset()
 num_classes = 2
 
-
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 resnet = models.resnet18(pretrained=True)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(resnet.parameters() , lr = lr)
 resnet.fc = nn.Linear(512,num_classes)
-resnet = resnet.cuda()
+resnet = resnet.to(device)
 def train(epoch):
     epoch =epoch
     running_loss = 0.0
     for i ,sample in enumerate(train_loader):
-        image = sample['image'].cuda()
-        label = sample['label'].to(torch.long).cuda()
+        image = sample['image'].to(device)
+        label = sample['label'].to(torch.long).to(device)
         optimizer.zero_grad()
 
         output = resnet(image)
@@ -51,14 +51,14 @@ def train(epoch):
 def test():
     net = models.resnet18(pretrained=True)
     net.fc = nn.Linear(512,num_classes)
-    net = net.cuda()
+    net = net.to(device)
     net.load_state_dict(torch.load("./checkpoint.pth"))
     correct = 0
     total = 0
     length = len(test_set)
     with torch.no_grad():
         for i ,sample in enumerate(test_loader):
-            image , label = sample["image"].cuda() , sample["label"].cuda()
+            image , label = sample["image"].to(device) , sample["label"].to(device)
             output = net(image)
             _,predicted = torch.max(output.data, 1)
             total+= label.size(0)
