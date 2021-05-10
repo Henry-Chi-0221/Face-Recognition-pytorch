@@ -28,4 +28,4 @@ tarball-lite
 
 .vscode/
 __pytorch__/
-
+test_image/

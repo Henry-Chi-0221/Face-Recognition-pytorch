@@ -27,6 +27,7 @@ cap = cv2.VideoCapture(0)
 counter = 0
 while(True):
     ret ,frame = cap.read()
+    #frame = cv2.imread('Andy-Lau.jpg')
     if ret == True:
         gray = cv2.cvtColor(frame , cv2.COLOR_BGR2GRAY)
 
@@ -50,6 +51,8 @@ while(True):
                     counter=5
                 print(f"output : {predicted.item()} , counter : {counter}")
         cv2.imshow('src' , frame)
+        if cv2.waitKey(1) % 0xFF == ord('c'):
+            cv2.imwrite('output.png' , frame)
         #cv2.imshow('gray' , gray)
         if cv2.waitKey(1) % 0xFF == ord('q'):
             break
