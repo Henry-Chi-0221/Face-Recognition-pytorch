@@ -4,6 +4,9 @@
 * Github : https://github.com/afad-dataset/tarball-lite
 
 * To solve data imbalance ,sample data are duplicate by 500 times and applied data augmentation.
+* This project was implemented as two stage classifier : 
+  * Haar cascade for face detection
+  * CNN for classification
 # Dependanceies
 * OpenCV
 * Pytorch
@@ -12,7 +15,7 @@
 * numpy
 
 # Usage
-* Prepare for training
+### Prepare for training
 * Press C to capture sample image (x100)
 ```bash
 python capture.py
@@ -20,7 +23,7 @@ python capture.py
 
 * All sample images will be saved in ./capture 
 
-* Training & Testing
+### Training & Testing
 ```bash
 python main.py
 ```
