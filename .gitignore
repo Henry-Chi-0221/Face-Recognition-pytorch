@@ -27,5 +27,5 @@ ext/libtool
 tarball-lite
 
 .vscode/
-__pytorch__/
+__pycache__/
 test_image/

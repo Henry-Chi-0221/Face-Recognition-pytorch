@@ -28,7 +28,7 @@ cap = cv2.VideoCapture(0)
 counter = 0
 while(True):
     ret ,frame = cap.read()
-    #frame = cv2.imread('Andy-Lau.jpg')
+    #frame = cv2.imread('./test_image/Andy-Lau.jpg')
     if ret == True:
         gray = cv2.cvtColor(frame , cv2.COLOR_BGR2GRAY)
 
@@ -36,7 +36,7 @@ while(True):
         for (x,y,w,h) in faces:
             if w>100 and h>100:
                 img_ori = frame.copy()
-                frame = cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),1)
+                frame = cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),2)
                 roi_gray = gray[y:y+h, x:x+w]
                 roi_color = frame[y:y+h, x:x+w]
                 crop = img_ori[y:y+h, x:x+w]
@@ -48,7 +48,7 @@ while(True):
                 else:
                     counter=0
                 if(counter>=5):
-                    frame = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),1)
+                    frame = cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
                     counter=5
                 #print(f"output : {predicted.item()} , counter : {counter}")
         cv2.imshow('src' , frame)
