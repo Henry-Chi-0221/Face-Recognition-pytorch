@@ -5,7 +5,7 @@
 
 * To solve data imbalance ,sample data are duplicate by 500 times and applied data augmentation.
 * This project was implemented as two stage classifier : 
-  * Haar cascade for face detection
+  * Haar cascade for front face detection
   * CNN for classification
 # Dependanceies
 * OpenCV
